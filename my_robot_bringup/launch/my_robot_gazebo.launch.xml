@@ -1,0 +1,41 @@
+<launch>
+    <!-- 1. FILE PATH CONFIGURATION VARIABLES:
+      Defines pointers to your URDF, Gazebo parameters, and custom RViz screen layouts. -->
+    <let name="urdf_path"
+        value="$(find-pkg-share my_robot_description)/urdf/new_activity_robot.urdf.xacro" />    
+    <let name="gazebo_config_path"
+        value="$(find-pkg-share my_robot_bringup)/config/gazebo_bridge.yaml"/>
+    <let name="rviz_config_path"
+        value="$(find-pkg-share my_robot_description)/rviz/differential_traction_robot_config.rviz"/>
+
+    <!-- 2. COORDINATE TRANSFORM SERVER (TF TRACKER):
+      Compiles Xacro into raw URDF text and calculates baseline coordinate tracking transforms. -->
+    <node pkg="robot_state_publisher" exec="robot_state_publisher">
+        <param name="robot_description"
+               value="$(command 'xacro $(var urdf_path)')" 
+               type="str"/> <!-- Added type declaration here to bypass YAML parsing rules -->
+    </node>
+    
+    <!-- 3. GEOMETRIC ENVIRONMENT ENGINE:
+      Loads the core Gazebo Sim software runtime using an empty standard world plane configuration. -->
+    <include file="$(find-pkg-share ros_gz_sim)/launch/gz_sim.launch.py">
+        <arg name="gz_args" value="$(find-pkg-share my_robot_bringup)/worlds/test_world.sdf -r" />
+       <!--<arg name="gz_args" value="empty.sdf -r" />-->     
+    </include>   
+
+    <!-- 4. MODEL INSTANTIATOR:
+      Grabs the raw text model from ROS parameter space and spawns it live into Gazebo physics. -->
+    <node pkg="ros_gz_sim" exec="create" args="-topic robot_description" />
+
+    <!-- 5. ROS-TO-GAZEBO TRANSLATION BRIDGE:
+      Launches a mapping pipeline to pass topics (like twist velocity / sensor data) back and forth. -->
+    <node pkg="ros_gz_bridge" exec="parameter_bridge">
+        <param name="config_file" value="$(var gazebo_config_path)"/>
+    </node>    
+    
+    <!-- 6. VISUAL RENDERING WINDOW:
+      Starts the graphical developer workbench window matching your saved system interface templates. -->
+    <node pkg="rviz2" exec="rviz2" output="screen"
+         args="-d $(var rviz_config_path)"/>           
+
+</launch>

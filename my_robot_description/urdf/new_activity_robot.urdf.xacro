@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<robot name="my_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <!-- 1. PROPERTIES & MATERIALS Imports the shared configuration file containing dimensions, colors, and math macros. -->
+    <xacro:include filename="common_properties.xacro"/>
+    
+    <!-- 2. CORE ROBOT STRUCTURE Imports the basic URDF links, shapes, and joints making up the physical robot body. -->
+    <xacro:include filename="mobile_base.xacro"/>
+    
+    <!-- 3. SIMULATOR PLUGINS & PHYSICS Imports the Gazebo-specific controllers, friction tunings, and sensor bridges. -->
+    <xacro:include filename="mobile_base_gazebo.xacro"/>
+
+    <xacro:include filename="arm.xacro"/>
+    <xacro:include filename="arm_gazebo.xacro"/>
+    <!-- 4. Include camera link-->
+    <xacro:include filename="camera.xacro"/>
+
+    <joint name="mobile_base_arm_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="arm_base_link"/>
+        <origin xyz="${base_length/4.0} 0 ${base_height}" rpy="0 0 0"/>
+    </joint>    
+    
+</robot>
