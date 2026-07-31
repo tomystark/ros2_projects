@@ -1,0 +1,129 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <!-- 1. ROBOT DIMENSIONS AND PARAMETERS
+      Defines physical sizes, radii, and widths as reusable variables. -->
+    <xacro:property name="base_length" value="0.6"/>
+    <xacro:property name="base_width" value="0.4" />
+    <xacro:property name="base_height" value="0.2" />
+    <xacro:property name="wheel_radius" value="0.1" />
+    <xacro:property name="wheel_length" value="0.05" /> 
+
+
+    <!-- 2. GROUND REFERENCE LINK
+      An empty, weightless link sitting directly on the floor for navigation tracking. -->
+    <link name="base_footprint_link"/>
+
+    <!-- 3. MAIN ROBOT CHASSIS BODY
+      Defines the physical box body, its material color, collisions, and mass weight. -->
+    <link name="base_link">
+        <visual>
+            <geometry>
+                <box size="${base_length} ${base_width} ${base_height}" />
+            </geometry>
+            <origin xyz="0 0 ${wheel_radius}" rpy="0 0 0" />
+
+            <material name="blue" />
+        </visual>
+
+        <collision>
+            <geometry>
+                <box size="${base_length} ${base_width} ${base_height}" />
+            </geometry>
+            <origin xyz="0 0 ${wheel_radius}" rpy="0 0 0" />
+        </collision>
+        
+        <xacro:box_inertia m="5.0" x="${base_length}" y="${base_width}" z="${base_height}"
+                           o_xyz="0 0 ${wheel_radius}" o_rpy="0 0 0"/>
+    
+    </link>
+
+    <!-- 4. REUSABLE WHEEL CREATOR TEMPLATE
+      A macro that automatically builds uniform wheel cylinders with spherical collision envelopes. -->
+    <xacro:macro name="wheel_link" params="prefix">
+        <link name="${prefix}_wheel_link">
+            <visual>
+                <geometry>
+                    <cylinder radius="${wheel_radius}" length="${wheel_length}" />
+                </geometry>
+                <origin xyz="0 0 0" rpy="${pi / 2.0} 0 0" />
+
+                <material name="grey" />
+            </visual>
+
+            <collision>
+                <geometry>
+                    <sphere radius="${wheel_radius}"/>
+                </geometry>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+            </collision>
+
+            <xacro:cylinder_inertia m="1.0" h="${wheel_length}" r="${wheel_radius}" 
+                                o_xyz="0 0 0" o_rpy="${pi / 2.0} 0 0"/>
+
+        </link>
+    </xacro:macro>
+
+    <!-- 5. INSTANTIATE WHEELS
+      Uses the macro block above to generate distinct left and right wheel segments. -->
+    <xacro:wheel_link prefix="right"/>
+    <xacro:wheel_link prefix="left"/>
+
+    <!-- 6. CASTER WHEEL PHYSICAL MESH
+      Defines a spherical front support wheel to balance out the chassis frame. -->
+    <link name="caster_wheel_link">
+        <visual>
+            <geometry>
+                <sphere radius="${wheel_radius / 2.0}"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+
+            <material name="grey"/>
+        </visual>
+
+        <collision>
+            <geometry>
+                <sphere radius="${wheel_radius / 2.0}"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </collision>
+
+        <xacro:sphere_inertia m="0.5" r="${wheel_radius / 2.0}" 
+                                o_xyz="0 0 0" o_rpy="${pi / 2.0} 0 0"/>
+    </link>
+
+    <!-- 7. ACTUATED DRIVE WHEEL JOINTS
+      Connects the drive wheels to the chassis with a rotating axis running sideways (Y-axis). -->
+    <joint name="base_right_wheel_joint" type="continuous">
+        <parent link="base_link"/>
+        <child link="right_wheel_link"/>
+        <origin xyz="${- base_length / 4.0} ${- base_width / 2.0 - wheel_length / 2.0} 0" rpy="0 0 0"/>
+        <axis xyz="0 1 0"/>
+    </joint>
+
+    <joint name="base_left_wheel_joint" type="continuous">
+        <parent link="base_link"/>
+        <child link="left_wheel_link"/>
+        <origin xyz="${- base_length / 4.0} ${base_width / 2.0 + wheel_length / 2.0} 0" rpy="0 0 0"/>
+        <axis xyz="0 1 0"/>
+    </joint>
+
+    <!-- 8. BALANCING FRONT SUPPORT JOINT
+      Connects the caster rigidly (fixed) to the front chassis to eliminate bouncy simulation artifacts. -->
+    <!--<joint name="base_caster_wheel_joint" type="continuous">-->
+    <joint name="base_caster_wheel_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="caster_wheel_link"/>
+        <origin xyz="${base_length / 4.0} 0 ${- wheel_radius / 2.0}" rpy="0 0 0"/>
+        <!--<axis xyz="0 1 0"/>-->
+    </joint>
+
+    <!-- 9. CHASSIS ATTACHMENT JOINT
+      Locks the main chassis assembly vertically onto your baseline footprint framework. -->
+    <joint name="base_footprint_joint" type="fixed">
+        <parent link="base_footprint_link"/>
+        <child link="base_link"/>
+        <origin xyz="0 0 ${wheel_radius}" rpy="0 0 0"/>
+    </joint>
+
+</robot>
