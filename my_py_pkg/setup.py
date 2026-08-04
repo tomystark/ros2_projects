@@ -25,17 +25,6 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            "py_node = my_py_pkg.my_first_node:main",
-            "robot_news_station = my_py_pkg.robot_news_station:main",
-            "smartphone = my_py_pkg.smartphone:main",
-            "activity2_publisher = my_py_pkg.activity2_publisher:main",
-            "activity2_counter = my_py_pkg.activity2_counter:main",
-            "add_two_ints_server = my_py_pkg.add_two_ints_server:main",
-            "add_two_ints_client_no_oop = my_py_pkg.add_two_ints_client_no_oop:main",
-            "add_two_ints_client = my_py_pkg.add_two_ints_client:main",
-            "hw_status_publisher = my_py_pkg.hardware_status_publisher:main",
-            "battery_node_client = my_py_pkg.battery_node_client:main",
-            "led_panel_node = my_py_pkg.led_panel_node_server:main",
             "turtle_controller= my_py_pkg.turtle_controller:main",
             "turtle_spawner= my_py_pkg.turtle_spawner:main"
         ],
