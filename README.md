@@ -15,7 +15,7 @@ IF YOU WANT TO LEARN PROPERLY I SUGGEST TAKING THE ACTUAL COURSES BY EDOUARD REN
 
 ## 📈 Current Progress
 
-- [x] **ROS 2 for Beginners (ROS Jazzy/Lyrical)** — Core node communication mechanics
-- [x] **ROS 2 Level 2** — TF coordinate frames, URDF design, and RViz/Gazebo setups
-- [ ] **ROS 2 Level 3** — Advanced concept implementations *(52% Completed)*
+- [x] **ROS 2 for Beginners (ROS Jazzy/Lyrical)** — Core node communication mechanics https://www.udemy.com/share/109qcM3@53H5oui3TReAXoF6n0LTyOtxTCOjgpmShlaNimLUAXCQMFPf2VRslm8sNo-W8LolvA==/
+- [x] **ROS 2 Level 2** — TF coordinate frames, URDF design, and RViz/Gazebo setups https://www.udemy.com/share/109qcM3@9awrVn6O9ZukYZ4SvxWbHCnPzQ-C0kIQBNuMrafh-jFQhujMkQwYfxyuQ_EQlgk5gQ==/
+- [ ] **ROS 2 Level 3** — Advanced concept implementations *(52% Completed)* https://www.udemy.com/share/103Dzm3@trAwQ2aTDtWCo1RT2z_8XsMegWgoywcA_gJ-Z8Lou3ryUsgk7xtMNUSldVDPZtnxTA==/
 - [ ] **Upcoming Focus:** Nav2, Hardware Control, and Embedded Raspberry Pi Integration
